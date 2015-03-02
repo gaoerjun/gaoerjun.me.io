@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script>
+        RADUIS=5;
+        window.onload=function(){
+            var canvas = document.getElementById("canvas");
+            var context = canvas.getContext("2d");
+            context.canvas.width = 1024;
+            context.canvas.height = 500;
+            E_context = context;
+            context.beginPath();
+            context.arc(300,100,RADUIS,0,2*Math.PI);
+            context.closePath();
+            context.fillStyle="red";
+            context.fill();
+            update();
+        }
+        var E_update = [{
+            x: 800,
+            y: 200,
+            oxv:-10,
+            oyv:-5,
+            a:0,
+            g: 30,
+            color:"red"
+        }]
+        function update(){
+           var ctx=E_context;
+            ctx.clearRect(0,0,1024,500);
+            for(var i=0;i<E_update.length;i++){
+                var ele = E_update[i];
+                ele.x=ele.x+ele.oxv+0.5*ele.a;
+                ele.y=ele.y+ele.oyv+0.5*ele.g;
+
+                ele.oxv=ele.oxv+ele.a;
+                ele.oyv=ele.oyv+ele.g;
+                if(ele.y+RADUIS>=E_context.canvas.height){
+                    ele.oyv=(-1)*ele.oyv*0.75;
+                }
+                if(ele.y>E_context.canvas.height-RADUIS){
+                    ele.y = E_context.canvas.height-RADUIS;
+                }
+                console.log("ele.y=="+ele.y);
+                ctx.beginPath();
+                ctx.arc(ele.x,ele.y,RADUIS,0,2*Math.PI);
+                ctx.closePath();
+                ctx.fillStyle=ele.color;
+                ctx.fill();
+            }
+            setTimeout(function(){
+                update();
+            },200)
+        }
+    </script>
+</head>
+<body style="height: 100%">
+<canvas id="canvas" ></canvas>
+</body>
+</html>
