@@ -1,2 +1,0 @@
-/*! pinganBank 2015-01-22 */
-var myModule=angular.module("todoApp",[]);myModule.controller("TodoController",["$scope",function(a){a.todos=[{text:"learn angular",done:!0},{text:"build an angular app",done:!1}],a.addTodo=function(){a.todos.push({text:a.todoText,done:!1}),a.todoText=""},a.remaining=function(){var b=0;return angular.forEach(a.todos,function(a){b+=a.done?0:1}),b},a.archive=function(){var b=a.todos;a.todos=[],angular.forEach(b,function(b){b.done||a.todos.push(b)})}}]);
