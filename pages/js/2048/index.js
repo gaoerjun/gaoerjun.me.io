@@ -5,12 +5,20 @@ $(function(){
     newBlock();
     newBlock();
     var canvas = document.getElementById("canvas");
-    canvas.addEventListener('touchstart', eventDown);
-    canvas.addEventListener('touchend', eventUp);
-    canvas.addEventListener('touchmove', eventMove);
-    canvas.addEventListener('mousedown', eventDown);
-    canvas.addEventListener('mouseup', eventUp);
-    canvas.addEventListener('mousemove', eventMove);
+    $(document).on("touchstart","#canvas",function(e){
+        eventDown(e);
+    }).on("touchend","#canvas",function(e){
+        eventUp(e);
+    }).on("touchmove","#canvas",function(e){
+        eventDown(e);
+    }).on("mouseup","#canvas",function(e){
+        eventUp(e);
+    }).on("mousemove","#canvas",function(e){
+        eventDown(e);
+    }).on("keydown","#canvas",function(e){
+        debugger;
+        alert(e.keyCode);
+    })
 })
 function Game(){
     this.playing = 0;

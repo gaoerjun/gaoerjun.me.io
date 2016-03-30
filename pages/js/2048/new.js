@@ -32,6 +32,7 @@ function Game2048(){
      */
     this.initEvent=function(){
         var canvas = document.getElementById("canvas");
+        var self = this;
         canvas.addEventListener('touchstart', this.eventDown.pointTo(this));
         canvas.addEventListener('touchend', this.eventUp.pointTo(this));
         canvas.addEventListener('touchmove',this.eventMove.pointTo(this));
@@ -40,6 +41,19 @@ function Game2048(){
         canvas.addEventListener('mousemove',this.eventMove.pointTo(this));
         var restartBtn = document.getElementById("restart");
         restartBtn.addEventListener('click',this.restartGame.pointTo(this));
+        $(document).on("keydown",function(e){
+           if(e.keyCode ==40 || e.keyCode ==83){
+               self.doMove("down");
+           }else if(e.keyCode ==38 || e.keyCode ==87){
+               self.doMove("up");
+           }else if(e.keyCode==39 || e.keyCode ==68){
+               self.doMove("right");
+           }else if(e.keyCode==37 || e.keyCode ==65){
+               self.doMove("left")
+           }
+        })
+
+
     }
 
     this.eventDown=function(e){
