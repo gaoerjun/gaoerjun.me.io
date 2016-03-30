@@ -123,6 +123,7 @@ Game2048.prototype.doMove=function(_derction){
             isHasChange=true;
         }
     }
+
     if(isHasChange){
         this.newBlock();
         var currcount = $(".count").html();
@@ -135,15 +136,19 @@ Game2048.prototype.doMove=function(_derction){
         },1000)
 
     }
+    //console.log("this bankArr =="+this.blankArr);
+    //console.log("###-------------------------##");
 }
 /**
  * 产生新的方块，2的几率90% 4的几率10%
  */
 Game2048.prototype.newBlock=function(){
+    //console.log("this.blankArr =="+this.blankArr);
     var num = Math.floor(Math.random()*(this.blankArr.length)+1);
+
     var pos = this.getBlankPosByNum(this.blankArr[num-1]);
+    //console.log("this.blankArr =="+this.blankArr+" pos.x=="+pos.x+"  pos.y=="+pos.y);
     this.updateBlock(pos.x,pos.y,Math.random()<0.9?2:4);
-    //console.log("num＝＝"+num+"  selectNum＝＝"+blankArr[num-1]+"   blankArr="+blankArr);
     this.blankArr.splice(num-1,1);
 
     if(this.blankArr.length==0){
@@ -151,7 +156,7 @@ Game2048.prototype.newBlock=function(){
             if(window.confirm("Game2048 over,是否重新开始？")){
                 this.restartGame();
             }else{
-                this.restartGame();
+                return false;
             }
         }
     }
@@ -235,9 +240,9 @@ Game2048.prototype.updateLine =function(_lineNum,_derc){
             istart--;
         }
     }
-    //console.log("numArr1=="+numArr);
     //更新数字
     //从头到尾两两合并，
+    //console.log(_derc+"  before set linenum"+_lineNum+" =="+numArr);
     for(var i=0;i<numArr.length;i++){
         if(i<=numArr.length-2){
             if( numArr[i]==numArr[i+1]){
@@ -255,11 +260,15 @@ Game2048.prototype.updateLine =function(_lineNum,_derc){
             }
         }
     }
+    //console.log(_derc+"  after set linenum"+_lineNum+" =="+numArr);
     //小于4位的后边用0补齐
     for(var i=numArr.length || 0;i<4;i++){
         numArr[i]=0;
     }
+    //console.log(_derc+"  final set linenum"+_lineNum+" =="+numArr );
+
     //根据不同的方向和数组一次更新每行或每列
+
     if(_derc=="left" ){
         for(var i=1;i<=4;i++ ){
             var num = numArr[i-1];
@@ -307,16 +316,26 @@ Game2048.prototype.updateBlock=function(_x,_y,_num){
     if(beforeVale==_num || (beforeVale=="" && _num==0)){
         if(_num==0){
             var num = this.getBlankNumByPos(_x,_y);
-            this.blankArr.push(num);
+            if($.inArray(num,this.blankArr)<0){
+                this.blankArr.push(num);
+            }
+
         }
         return false;
     }
     if(_num>0){
         updateDom.attr("class","i_block item"+_num).html(_num);
+        var indexNum = this.getBlankNumByPos(_x,_y);
+        var index = $.inArray(indexNum,this.blankArr);
+        if(index>0){
+            this.blankArr.splice(index,1);
+        }
     }else{
         var num = this.getBlankNumByPos(_x,_y);
         //console.log("numm=="+num);
-        this.blankArr.push(num);
+        if($.inArray(num,this.blankArr)<0){
+            this.blankArr.push(num);
+        }
         updateDom.attr("class","i_block").html("");
     }
     return true;
