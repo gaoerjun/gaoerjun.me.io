@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>canvas drawing</title>
+    <style>
+        *{
+            padding:0px;
+            margin: 0px;
+        }
+        #clock-ctl{
+           position: absolute;
+            left:0px;
+            top:0px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="clock" width="500px" height="600px"></canvas>
+    <canvas id="clock-ctl" width="500px" height="600px"></canvas>
+</body>
+<script type="application/javascript">
+    function drawRect(){
+        var canvas = document.getElementById("canvas_pic");
+        var context = canvas.getContext("2d");
+        context.strokeStyle="blue";
+        context.lineWidth="5";
+        context.lineCap="round";
+        context.lineJoin="round";
+        context.strokeRect(10,10,200,100);
+
+        context.fillStyle="rgba(0,0,0,.5)";
+        context.fillRect(30,30,200,100);
+
+        context.fillStyle="rgba(0,0,0,.5)";
+        context.fillRect(50,50,200,100);
+        context.clearRect(80,70,30,30)
+
+    }
+        function drawClock(){
+            var clock = document.getElementById("clock");
+            var cctx =  clock.getContext("2d");
+            cctx.beginPath();
+            cctx.arc(200,200,100,0,2*Math.PI,false);
+            cctx.stroke();
+            cctx.beginPath();
+            cctx.moveTo(294,200);
+            cctx.arc(200,200,94,0,2*Math.PI,false);
+            cctx.fillStyle="green";
+            cctx.fill();
+            cctx.fillStyle="blue";
+            cctx.font="bold 12px Arial";
+            cctx.textAlign="center";
+            cctx.textBaseline="middle";
+            cctx.fillText("0",200,118);
+            cctx.fillText("15",280,200);
+            cctx.fillText("30",200,285);
+            cctx.fillText("45",118,200);
+            var clock_ctl = document.getElementById("clock-ctl");
+             cctx =  clock_ctl.getContext("2d");
+            cctx.beginPath();
+            cctx.moveTo(200,200);
+            cctx.lineTo(200,126);
+            cctx.lineTo(200,130);
+            cctx.stroke();
+
+            setTimeout(function(){
+                gotime();
+            },1000);
+
+
+        }
+    var time =0;
+    function gotime(){
+        time++;
+        var clock_ctl = document.getElementById("clock-ctl");
+        cctx =  clock_ctl.getContext("2d")
+        cctx.clearRect(100,100,200,200);
+        cctx.beginPath();
+        cctx.moveTo(200,200);
+        cctx.lineTo(200+70*Math.sin(time*6*Math.PI/180/60),200-70*Math.cos(time*6*Math.PI/180/60));
+        cctx.moveTo(200,200);
+        cctx.lineTo(200+74*Math.sin(time*6*Math.PI/180),200-74*Math.cos(time*6*Math.PI/180));
+        cctx.stroke();
+        setTimeout(function(){
+            gotime();
+        },1000);
+    }
+        drawClock();
+
+
+
+</script>
+</html>

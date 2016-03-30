@@ -1,0 +1,134 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width; initial-scale=1.0">
+<title>演示：使用HTML5实现刮刮卡效果</title>
+<style type="text/css">
+.demo{width:320px; margin:10px auto 20px auto; min-height:300px;position: relative}
+.text{
+    width:320px;
+    height:120px;
+    position:absolute;
+    line-height: 120px;
+    text-align: center;
+    left: 0px;
+    top:0px;
+    z-index: 1;
+}
+canvas{
+    position:absolute;
+    left: 0px;
+    top:0px;
+    z-index: 2;
+}
+.msg{text-align:center; height:32px; line-height:32px; font-weight:bold; margin-top:50px}
+</style>
+</head>
+
+<body>
+<div id="main">
+   <h2 class="top_title"><a href="http://www.helloweba.com/view-blog-270.html">使用HTML5实现刮刮卡效果</a></h2>
+   <div class="msg">刮开灰色部分看看，<a href="javascript:void(0)" onClick="window.location.reload()">再来一次</a></div>
+   <div class="demo" id="demo">
+   		<canvas></canvas>
+       <div class="text">123321231321</div>
+   </div>
+</div>
+
+<script type="text/javascript">
+var bodyStyle = document.body.style;
+
+bodyStyle.mozUserSelect = 'none';
+bodyStyle.webkitUserSelect = 'none';
+
+var img = new Image();
+var canvas = document.querySelector('canvas');
+canvas.style.backgroundColor='transparent';
+canvas.style.position = 'absolute';
+var imgs = ['p_0.jpg','p_1.jpg'];
+var num = Math.floor(Math.random()*2);
+img.src = imgs[num];
+    var areaJson = [];
+	var ctx;
+    var w = 300
+    	h = 120;
+    var offsetX = canvas.offsetLeft,
+    	offsetY = canvas.offsetTop;
+    var mousedown = false;
+
+    function layer(ctx) {
+        ctx.fillStyle = 'gray';
+        ctx.fillRect(0, 0, w, h);
+    }
+
+    function eventDown(e){
+        e.preventDefault();
+        mousedown=true;
+    }
+
+    function eventUp(e){
+        e.preventDefault();
+        mousedown=false;
+    }
+    var demox = document.getElementById("demo").offsetLeft;
+    var demoy = document.getElementById("demo").offsetTop;
+    function eventMove(e){
+        e.preventDefault();
+        if(mousedown) {
+             if(e.changedTouches){
+                 e=e.changedTouches[e.changedTouches.length-1];
+             }
+             var x = (e.clientX + document.body.scrollLeft || e.pageX) - demox || 0,
+                 y = (e.clientY + document.body.scrollTop || e.pageY) - demoy || 0;
+             with(ctx) {
+                 beginPath()
+                 fillStyle="red";
+                 arc(x, y, 15, 0, Math.PI * 2);
+                 fill();
+                 saveArea(x,y,15);
+             }
+
+        }
+    }
+    function saveArea(_x,_y,_radius){
+        for(var i=_x-_radius;i<_x+_radius;i++){
+            if(i<0){
+                continue;
+            }
+            for(var j=_y-_radius;j<_y+_radius;j++){
+                if(j<0) continue;
+                areaJson[i+"_"+j]=1;
+            }
+        }
+        var count = 0;
+        for(var key in areaJson){
+            //i即属性名字ok,close
+            count++;
+        }
+        if(count>=18000){
+            with(ctx) {
+                beginPath()
+                rect(0, 0, 300, 120);
+                fill();
+            }
+        }
+    }
+    canvas.width=w;
+    canvas.height=h;
+    ctx=canvas.getContext('2d');
+    ctx.fillStyle='transparent';
+    ctx.fillRect(0, 0, w, h);
+    layer(ctx);
+
+    ctx.globalCompositeOperation = 'destination-out';
+
+    canvas.addEventListener('touchstart', eventDown);
+    canvas.addEventListener('touchend', eventUp);
+    canvas.addEventListener('touchmove', eventMove);
+    canvas.addEventListener('mousedown', eventDown);
+    canvas.addEventListener('mouseup', eventUp);
+    canvas.addEventListener('mousemove', eventMove);
+</script>
+</body>
+</html>

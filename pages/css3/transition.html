@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        #transformDiv{
+            background: red;
+            border-radius: 10px;
+            box-shadow: 10px 10px 2px blue;
+            width: 300px;
+            height: 500px;
+            color:white;
+            text-align: center;
+            line-height: 200px;
+            transform: rotate(30deg) translate(50px,-100px) scale(0.5,0.5) skew(10deg,20deg);
+            /*transform: translate(50px,100px);*/
+            /*transform: scale(0.5,0.5);*/
+        }
+        .transitionDiv{
+            position:absolute;
+            background: #0000ff;
+            width: 200px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 1.2em;
+            color: white;
+            left: 100px;
+            top:100px;
+           transition: width 5s,height 2s ,color 5s,background 2s,line-height 2s,left 5s,top 5s,margin 5s,color 5s ,transform 5s;
+        }
+        .transitionclick{
+            position:absolute;
+            width: 220px;
+            height: 80px;
+            line-height: 80px;
+            background: #ff0000;
+            font-size: 1.3em;
+            left: 50%;
+            margin-left: -110px;
+            top:50%;
+            margin-top: -40px;
+            color: #000000;
+            transform: rotate(360deg);
+
+        }
+    </style>
+</head>
+<body>
+<!--<div id="transformDiv">Holy Bible</div>-->
+
+<div class="transitionDiv" onclick="clickFun(this);" id="transitionDiv">点击我查看神奇效果</div>
+<script type="text/javascript">
+    function atachEvent(_elements){
+
+    }
+    function hasClass(_ele,_className){
+        var classNames = _ele.className ;
+        var arrClass = classNames.split(/\s+/);
+        return arrClass.indexOf(_className)>-1;
+    }
+    function removeClass(_ele,_className){
+        if(!hasClass(_ele,_className)){
+           return ;
+        }
+        var classNames = _ele.className ;
+        var arrClass = classNames.split(/\s+/);
+        var index = arrClass.indexOf(_className);
+        arrClass.splice(index,1);
+        _ele.className = arrClass.join(" ");
+    }
+    function clickFun(_this){
+        if(hasClass(_this,"transitionclick")){
+            removeClass(_this,"transitionclick")
+        }else{
+            _this.className = _this.className +" transitionclick";
+        }
+    }
+
+</script>
+</body>
+</html>
